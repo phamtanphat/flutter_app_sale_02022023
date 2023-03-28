@@ -12,7 +12,7 @@ class AuthenticationRepository {
     _apiRequest = apiRequest;
   }
   
-  Future signIn({required String email, required String password}) async{
+  Future<UserDto> signIn({required String email, required String password}) async{
     Completer<UserDto> completerUserDto = Completer();
     try {
       Response response = await _apiRequest?.signInRequest(email: email, password: password);
