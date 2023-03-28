@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_app_sale_02022023/common/constants/api_constant.dart';
+import 'package:flutter_app_sale_02022023/common/constants/app_constant.dart';
 
 class DioClient {
   Dio? _dio;
   static final BaseOptions _options = BaseOptions(
-    baseUrl: ApiConstant.BASE_URL,
+    baseUrl: AppConstant.BASE_URL,
     connectTimeout: 30000,
     receiveTimeout: 30000,
   );
