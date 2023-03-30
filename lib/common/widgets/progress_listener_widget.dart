@@ -40,13 +40,9 @@ class _ProgressListenerWidgetState<T> extends State<ProgressListenerWidget> {
       updateShouldNotify: (prev, current) {
         return true;
       },
-      child: Consumer<BaseEvent?>(
-        builder: (context, event, child) {
-          return Container(
-            child: widget.child,
-          );
-        },
-      ),
+      child: Container(
+        child: widget.child,
+      )
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_sale_02022023/common/bases/base_widget.dart';
+import 'package:flutter_app_sale_02022023/common/widgets/loading_widget.dart';
+import 'package:flutter_app_sale_02022023/common/widgets/progress_listener_widget.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/remote/api_request.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/repositories/authentication_repository.dart';
 import 'package:flutter_app_sale_02022023/presentations/sign_in/bloc/sign_in_event.dart';
@@ -74,18 +76,22 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: SafeArea(
-        child: Container(
-          constraints: const BoxConstraints.expand(),
-          child: LayoutBuilder(
-              builder: (context, constraint){
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                    child: IntrinsicHeight(
-                      child: Stack(
-                        children: [
-                          Column(
+      child: LoadingWidget(
+        bloc: _bloc,
+        child: SafeArea(
+          child: Container(
+            constraints: const BoxConstraints.expand(),
+            child: LayoutBuilder(
+                builder: (context, constraint){
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                      child: IntrinsicHeight(
+                        child: ProgressListenerWidget<SignInBloc>(
+                          callback: (event) {
+                            print(event.runtimeType);
+                          },
+                          child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
@@ -113,14 +119,14 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
                               Expanded(child: _buildTextSignUp())
                             ],
                           ),
-                        ],
+                        )
                       ),
                     ),
-                  ),
-                );
-              }
-          ),
-        )
+                  );
+                }
+            ),
+          )
+        ),
       ),
     );
   }

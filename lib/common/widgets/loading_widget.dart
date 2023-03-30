@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_sale_02022023/utils/dimension_utils.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../bases/base_bloc.dart';
@@ -24,17 +25,16 @@ class LoadingWidget extends StatelessWidget {
           Consumer<bool>(
             builder: (context, isLoading, child) => Center(
               child: isLoading
-                  ? Container(
-                      width: 120,
-                      height: 120,
-                      decoration: const BoxDecoration(
-                        color: Colors.black45,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
+                  ? IgnorePointer(
+                      ignoring: false,
+                      child: Container(
+                        constraints: BoxConstraints.expand(),
+                        decoration: const BoxDecoration(
+                          color: Colors.black45,
                         ),
-                      ),
-                      child: const SpinKitPouringHourGlass(
-                        color: Colors.white,
+                        child: const SpinKitPouringHourGlass(
+                          color: Colors.white,
+                        ),
                       ),
                     )
                   : Container(),
