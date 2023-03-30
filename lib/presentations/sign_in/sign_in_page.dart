@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_app_sale_02022023/common/bases/base_widget.dart';
 import 'package:flutter_app_sale_02022023/common/widgets/loading_widget.dart';
 import 'package:flutter_app_sale_02022023/common/widgets/progress_listener_widget.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_app_sale_02022023/data/datasources/remote/api_request.da
 import 'package:flutter_app_sale_02022023/data/datasources/repositories/authentication_repository.dart';
 import 'package:flutter_app_sale_02022023/presentations/sign_in/bloc/sign_in_event.dart';
 import 'package:flutter_app_sale_02022023/utils/dimension_utils.dart';
+import 'package:flutter_app_sale_02022023/utils/message_utils.dart';
 import 'package:provider/provider.dart';
 
 import 'bloc/sign_in_bloc.dart';
@@ -46,9 +48,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 }
 
-
 class SignInContainerWidget extends StatefulWidget {
-
   @override
   State<SignInContainerWidget> createState() => _SignInContainerWidgetState();
 }
@@ -62,6 +62,11 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
   void initState() {
     super.initState();
     _bloc = context.read();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _bloc.messageStream.listen((event) {
+        MessageUtils.showMessage(context, "Alert!!", event.toString());
+      });
+    });
   }
 
   void onPressSignIn() {
@@ -79,54 +84,56 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
       child: LoadingWidget(
         bloc: _bloc,
         child: SafeArea(
-          child: Container(
-            constraints: const BoxConstraints.expand(),
-            child: LayoutBuilder(
-                builder: (context, constraint){
-                  return SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: constraint.maxHeight),
-                      child: IntrinsicHeight(
-                        child: ProgressListenerWidget<SignInBloc>(
-                          callback: (event) {
-                            print(event.runtimeType);
-                          },
+            child: Container(
+          constraints: const BoxConstraints.expand(),
+          child: LayoutBuilder(builder: (context, constraint) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                child: IntrinsicHeight(
+                    child: ProgressListenerWidget<SignInBloc>(
+                  callback: (event) {
+                    print(event.runtimeType);
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                          flex: 2,
+                          child:
+                              Image.asset("assets/images/ic_food_express.png")),
+                      Expanded(
+                        flex: 4,
+                        child: Container(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Expanded(
-                                  flex: 2, child: Image.asset("assets/images/ic_food_express.png")),
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: DimensionUtils.paddingHeightDivideNumber(context)),
-                                        child: _buildEmailTextField(),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: DimensionUtils.paddingHeightDivideNumber(context)),
-                                        child: _buildPasswordTextField(),
-                                      ),
-                                      _buildButtonSignIn(onPressSignIn),
-                                    ],
-                                  ),
-                                ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: DimensionUtils
+                                        .paddingHeightDivideNumber(context)),
+                                child: _buildEmailTextField(),
                               ),
-                              Expanded(child: _buildTextSignUp())
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: DimensionUtils
+                                        .paddingHeightDivideNumber(context)),
+                                child: _buildPasswordTextField(),
+                              ),
+                              _buildButtonSignIn(onPressSignIn),
                             ],
                           ),
-                        )
+                        ),
                       ),
-                    ),
-                  );
-                }
-            ),
-          )
-        ),
+                      Expanded(child: _buildTextSignUp())
+                    ],
+                  ),
+                )),
+              ),
+            );
+          }),
+        )),
       ),
     );
   }
@@ -140,9 +147,7 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
           children: [
             Text("Don't have an account!"),
             InkWell(
-              onTap: () async{
-
-              },
+              onTap: () async {},
               child: Text("Sign Up",
                   style: TextStyle(
                       color: Colors.red, decoration: TextDecoration.underline)),
@@ -214,18 +219,18 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
         child: ElevatedButtonTheme(
             data: ElevatedButtonThemeData(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith((states) {
-                    if (states.contains(MaterialState.pressed)) {
-                      return Colors.blue[500];
-                    } else if (states.contains(MaterialState.disabled)) {
-                      return Colors.grey;
-                    }
-                    return Colors.blueAccent;
-                  }),
-                  elevation: MaterialStateProperty.all(5),
-                  padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 100)),
-                )),
+              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return Colors.blue[500];
+                } else if (states.contains(MaterialState.disabled)) {
+                  return Colors.grey;
+                }
+                return Colors.blueAccent;
+              }),
+              elevation: MaterialStateProperty.all(5),
+              padding: MaterialStateProperty.all(
+                  EdgeInsets.symmetric(vertical: 5, horizontal: 100)),
+            )),
             child: ElevatedButton(
               child: Text("Login",
                   style: TextStyle(fontSize: 18, color: Colors.white)),

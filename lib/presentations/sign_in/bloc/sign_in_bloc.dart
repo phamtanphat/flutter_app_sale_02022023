@@ -30,6 +30,7 @@ class SignInBloc extends BaseBloc {
               key: AppConstant.TOKEN_KEY,
               value: userDto.token ?? ""
           );
+          messageSink.add("Login success");
           progressSink.add(SignInSuccessEvent());
         })
         .catchError((e) {
