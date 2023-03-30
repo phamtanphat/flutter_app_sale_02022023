@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_sale_02022023/common/bases/base_widget.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/remote/api_request.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/repositories/authentication_repository.dart';
+import 'package:flutter_app_sale_02022023/presentations/sign_in/bloc/sign_in_event.dart';
 import 'package:flutter_app_sale_02022023/utils/dimension_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -51,9 +52,23 @@ class SignInContainerWidget extends StatefulWidget {
 }
 
 class _SignInContainerWidgetState extends State<SignInContainerWidget> {
-
+  late SignInBloc _bloc;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = context.read();
+  }
+
+  void onPressSignIn() {
+    String email = emailController.text.toString();
+    String password = passwordController.text.toString();
+
+    if (email.isEmpty || password.isEmpty) return;
+    _bloc.executeSignIn(SignInEvent(email: email, password: password));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +105,7 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
                                         padding: EdgeInsets.only(top: DimensionUtils.paddingHeightDivideNumber(context)),
                                         child: _buildPasswordTextField(),
                                       ),
-                                      _buildButtonSignIn(() {
-
-                                      }),
+                                      _buildButtonSignIn(onPressSignIn),
                                     ],
                                   ),
                                 ),
