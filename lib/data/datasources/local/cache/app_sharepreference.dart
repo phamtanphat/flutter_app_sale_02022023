@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AppCache {
+class AppSharePreference {
   static SharedPreferences? _prefs;
 
   static Future<SharedPreferences> init() async {

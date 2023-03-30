@@ -1,12 +1,14 @@
 import 'package:flutter_app_sale_02022023/common/bases/base_bloc.dart';
 import 'package:flutter_app_sale_02022023/common/bases/base_event.dart';
+import 'package:flutter_app_sale_02022023/common/constants/app_constant.dart';
+import 'package:flutter_app_sale_02022023/data/datasources/local/cache/app_sharepreference.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/repositories/authentication_repository.dart';
 import 'package:flutter_app_sale_02022023/presentations/sign_in/bloc/sign_in_event.dart';
 
 class SignInBloc extends BaseBloc {
   AuthenticationRepository? _authenticationRepository;
 
-  void updateAuthenticationRepo(AuthenticationRepository repository) {
+  void setAuthenticationRepo(AuthenticationRepository repository) {
     _authenticationRepository = repository;
   }
 
@@ -23,7 +25,11 @@ class SignInBloc extends BaseBloc {
     loadingSink.add(true);
     _authenticationRepository
         ?.signIn(email: event.email, password: event.password)
-        .then((_) {
+        .then((userDto) {
+          AppSharePreference.setString(
+              key: AppConstant.TOKEN_KEY,
+              value: userDto.token ?? ""
+          );
           progressSink.add(SignInSuccessEvent());
         })
         .catchError((e) {
@@ -31,5 +37,4 @@ class SignInBloc extends BaseBloc {
         })
         .whenComplete(() => loadingSink.add(false));
   }
-
 }
