@@ -60,38 +60,54 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
     return Container(
       color: Colors.white,
       child: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                    flex: 2, child: Image.asset("assets/images/ic_food_express.png")),
-                Expanded(
-                  flex: 4,
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: DimensionUtils.paddingHeightDivideNumber(context)),
-                          child: _buildEmailTextField(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: DimensionUtils.paddingHeightDivideNumber(context)),
-                          child: _buildPasswordTextField(),
-                        ),
-                        _buildButtonSignIn(() {
+        child: Container(
+          constraints: const BoxConstraints.expand(),
+          child: LayoutBuilder(
+              builder: (context, constraint){
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                    child: IntrinsicHeight(
+                      child: Stack(
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Expanded(
+                                  flex: 2, child: Image.asset("assets/images/ic_food_express.png")),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(top: DimensionUtils.paddingHeightDivideNumber(context)),
+                                        child: _buildEmailTextField(),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: DimensionUtils.paddingHeightDivideNumber(context)),
+                                        child: _buildPasswordTextField(),
+                                      ),
+                                      _buildButtonSignIn(() {
 
-                        }),
-                      ],
+                                      }),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Expanded(child: _buildTextSignUp())
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Expanded(child: _buildTextSignUp())
-              ],
-            ),
-          ],
-        ),
+                );
+              }
+          ),
+        )
       ),
     );
   }
