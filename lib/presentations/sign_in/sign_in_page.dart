@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_app_sale_02022023/common/bases/base_widget.dart';
+import 'package:flutter_app_sale_02022023/common/constants/app_constant.dart';
 import 'package:flutter_app_sale_02022023/common/widgets/loading_widget.dart';
 import 'package:flutter_app_sale_02022023/common/widgets/progress_listener_widget.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/remote/api_request.dart';
@@ -147,7 +148,18 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
           children: [
             Text("Don't have an account!"),
             InkWell(
-              onTap: () async {},
+              onTap: () async {
+                try {
+                  var data = await Navigator.pushNamed(context, AppConstant.SIGN_UP_ROUTE) as Map;
+                  setState(() {
+                    emailController.text = data["email"];
+                    passwordController.text = data["password"];
+                  });
+                } catch (e) {
+                  MessageUtils.showMessage(context, "Alert!!", e.toString());
+                  return;
+                }
+              },
               child: Text("Sign Up",
                   style: TextStyle(
                       color: Colors.red, decoration: TextDecoration.underline)),

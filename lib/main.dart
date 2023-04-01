@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_sale_02022023/common/constants/app_constant.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/local/cache/app_sharepreference.dart';
 import 'package:flutter_app_sale_02022023/presentations/sign_in/sign_in_page.dart';
+import 'package:flutter_app_sale_02022023/presentations/sign_up/sign_up_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,9 +21,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/sign-in",
+      initialRoute: AppConstant.SIGN_IN_ROUTE,
       routes: {
-        "/sign-in" : (context) => SignInPage()
+        AppConstant.SIGN_IN_ROUTE : (context) => SignInPage(),
+        AppConstant.SIGN_UP_ROUTE : (context) => SignUpPage(),
       },
     );
   }
