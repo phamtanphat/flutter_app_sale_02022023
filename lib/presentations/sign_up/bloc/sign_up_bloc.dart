@@ -3,7 +3,6 @@ import 'package:flutter_app_sale_02022023/common/bases/base_event.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/repositories/authentication_repository.dart';
 import 'package:flutter_app_sale_02022023/presentations/sign_up/bloc/sign_up_event.dart';
 
-
 class SignUpBloc extends BaseBloc {
   AuthenticationRepository? _authenticationRepository;
 
@@ -30,9 +29,11 @@ class SignUpBloc extends BaseBloc {
           phone: event.phone,
           address: event.address)
       .then((userDto) {
-          messageSink.add("Congratulation Register success");
-          progressSink.add(SignUpSuccessEvent(email: event.email, password: event.password));
-      }).catchError((e) {
+        progressSink.add(SignUpSuccessEvent(
+            email: event.email,
+            password: event.password,
+            message: "Congratulation Register success"));
+    }).catchError((e) {
             messageSink.add(e.toString());
       }).whenComplete(() => loadingSink.add(false));
   }

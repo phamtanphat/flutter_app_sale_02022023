@@ -154,6 +154,7 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
                   setState(() {
                     emailController.text = data["email"];
                     passwordController.text = data["password"];
+                    MessageUtils.showMessage(context, "Alert!!", data["message"]);
                   });
                 } catch (e) {
                   MessageUtils.showMessage(context, "Alert!!", e.toString());
@@ -248,5 +249,11 @@ class _SignInContainerWidgetState extends State<SignInContainerWidget> {
                   style: TextStyle(fontSize: 18, color: Colors.white)),
               onPressed: () => onPress(),
             )));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispose();
   }
 }

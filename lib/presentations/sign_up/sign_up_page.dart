@@ -68,12 +68,6 @@ class _SignUpContainerState extends State<SignUpContainer> {
   void initState() {
     super.initState();
     _bloc = context.read<SignUpBloc>();
-
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _bloc.messageStream.listen((event) {
-        MessageUtils.showMessage(context, "Alert!!", event.toString());
-      });
-    });
   }
 
   void clickSignUp() {
@@ -136,7 +130,8 @@ class _SignUpContainerState extends State<SignUpContainer> {
                                   if (event is SignUpSuccessEvent) {
                                     Navigator.pop(context, {
                                       "email": event.email,
-                                      "password": event.password
+                                      "password": event.password,
+                                      "message": event.message
                                     });
                                   }
                                 },
@@ -296,7 +291,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
     );
   }
 
-  Widget _buildButtonSignUp(Function()? function) {
+  Widget _buildButtonSignUp(Function() function) {
     return Container(
         margin: EdgeInsets.only(top: 20),
         child: ElevatedButtonTheme(

@@ -35,8 +35,8 @@ class AuthenticationRepository {
     required String name,
     required String phone,
     required String password,
-    required String address})
-  async {
+    required String address
+  }) async {
     Completer<UserDto> completerUserDto = Completer();
     try {
       Response response = await _apiRequest?.signUpRequest(

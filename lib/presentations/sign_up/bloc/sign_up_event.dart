@@ -16,10 +16,11 @@ class SignUpEvent extends BaseEvent {
 }
 
 class SignUpSuccessEvent extends BaseEvent {
-  String email, password;
+  String email, password, message;
 
   SignUpSuccessEvent({
     required this.email,
+    required this.message,
     required this.password,
   });
 
