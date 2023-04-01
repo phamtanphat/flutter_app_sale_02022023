@@ -4,6 +4,7 @@ class AppConstant {
   static const String BASE_URL = "https://serverappsale.onrender.com/";
   static const String SIGN_IN_URL = "user/sign-in";
   static const String SIGN_UP_URL = "/user/sign-up";
+  static const String LIST_PRODUCT_URL = "/product";
 
   // Share preference key
   static const String TOKEN_KEY = "token";

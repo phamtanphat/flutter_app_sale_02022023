@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_app_sale_02022023/common/constants/app_constant.dart';
-
 import 'dio_client.dart';
 
 class ApiRequest {
@@ -31,5 +30,9 @@ class ApiRequest {
       "name": name,
       "address": address
     });
+  }
+
+  Future fetchListProductRequest() {
+    return _dio.get(AppConstant.LIST_PRODUCT_URL);
   }
 }
