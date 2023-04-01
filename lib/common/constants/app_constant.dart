@@ -11,4 +11,6 @@ class AppConstant {
   // Route
   static const String SIGN_IN_ROUTE = "/sign-in";
   static const String SIGN_UP_ROUTE = "/sign-up";
+  static const String HOME_ROUTE = "/home";
+  static const String SPLASH_ROUTE = "/splash";
 }
