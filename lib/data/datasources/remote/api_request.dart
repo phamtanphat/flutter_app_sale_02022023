@@ -35,4 +35,8 @@ class ApiRequest {
   Future fetchListProductRequest() {
     return _dio.get(AppConstant.LIST_PRODUCT_URL);
   }
+
+  Future fetchCart() {
+    return _dio.get(AppConstant.CART_URL);
+  }
 }
