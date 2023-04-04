@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_sale_02022023/common/bases/base_widget.dart';
 import 'package:flutter_app_sale_02022023/common/constants/app_constant.dart';
 import 'package:flutter_app_sale_02022023/common/widgets/loading_widget.dart';
+import 'package:flutter_app_sale_02022023/data/datasources/models/cart.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/models/product_model.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/remote/api_request.dart';
+import 'package:flutter_app_sale_02022023/data/datasources/repositories/cart_repository.dart';
 import 'package:flutter_app_sale_02022023/data/datasources/repositories/product_repository.dart';
 import 'package:flutter_app_sale_02022023/presentations/home/bloc/home_bloc.dart';
 import 'package:flutter_app_sale_02022023/presentations/home/bloc/home_event.dart';
@@ -35,15 +37,26 @@ class _HomePageState extends State<HomePage> {
             child: Icon(Icons.history)
           ),
           SizedBox(width: 10),
-          Container(
-            margin: EdgeInsets.only(right: 10, top: 10),
-            child: Badge(
-              badgeContent: Text(
-                "0",
-                style: const TextStyle(color: Colors.white),
-              ),
-              child: Icon(Icons.shopping_cart_outlined),
-            ),
+          Consumer<HomeBloc>(
+            builder: (context, bloc, child){
+              return StreamBuilder<Cart>(
+                  initialData: null,
+                  stream: bloc.cartStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError || snapshot.data == null || snapshot.data?.products.isEmpty == true) {
+                      return Container();
+                    }
+                    int count = snapshot.data?.products.length ?? 0;
+                    return Container(
+                      margin: EdgeInsets.only(right: 10, top: 10),
+                      child: Badge(
+                        badgeContent: Text(count.toString(), style: const TextStyle(color: Colors.white),),
+                        child: Icon(Icons.shopping_cart_outlined),
+                      ),
+                    );
+                  }
+              );
+            },
           ),
           SizedBox(width: 10),
         ],
@@ -58,11 +71,20 @@ class _HomePageState extends State<HomePage> {
             return repository;
           },
         ),
-        ProxyProvider<ProductRepository, HomeBloc>(
+        ProxyProvider<ApiRequest, CartRepository>(
+          create: (context) => CartRepository(),
+          update: (_, request, repository) {
+            repository ??= CartRepository();
+            repository.setApiRequest(request);
+            return repository;
+          },
+        ),
+        ProxyProvider2<ProductRepository, CartRepository, HomeBloc>(
           create: (context) => HomeBloc(),
-          update: (_, repository, bloc) {
+          update: (_, productRepo, cartRepository, bloc) {
             bloc ??= HomeBloc();
-            bloc.setProductRepo(repository);
+            bloc.setProductRepo(productRepo);
+            bloc.setCartRepo(cartRepository);
             return bloc;
           },
         )
@@ -85,6 +107,7 @@ class _HomePageContainerState extends State<HomePageContainer> {
     super.initState();
     _bloc = context.read();
     _bloc.eventSink.add(FetchProductsEvent());
+    _bloc.eventSink.add(FetchCartEvent());
   }
 
   @override

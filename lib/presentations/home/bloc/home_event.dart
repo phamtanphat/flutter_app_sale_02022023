@@ -4,3 +4,8 @@ class FetchProductsEvent extends BaseEvent {
   @override
   List<Object?> get props => [];
 }
+
+class FetchCartEvent extends BaseEvent {
+  @override
+  List<Object?> get props => [];
+}
