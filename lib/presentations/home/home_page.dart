@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_sale_02022023/common/bases/base_widget.dart';
 import 'package:flutter_app_sale_02022023/common/constants/app_constant.dart';
@@ -21,7 +22,31 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
-        title: Text("Products"),
+        title: const Text("Products"),
+        leading: IconButton(
+          icon: Icon(Icons.logout),
+          onPressed: (){
+
+          },
+        ),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 10, top: 10),
+            child: Icon(Icons.history)
+          ),
+          SizedBox(width: 10),
+          Container(
+            margin: EdgeInsets.only(right: 10, top: 10),
+            child: Badge(
+              badgeContent: Text(
+                "0",
+                style: const TextStyle(color: Colors.white),
+              ),
+              child: Icon(Icons.shopping_cart_outlined),
+            ),
+          ),
+          SizedBox(width: 10),
+        ],
       ),
       providers: [
         Provider(create: (context) => ApiRequest()),
