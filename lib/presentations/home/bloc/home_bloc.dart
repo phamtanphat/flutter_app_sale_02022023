@@ -34,6 +34,9 @@ class HomeBloc extends BaseBloc {
       case FetchCartEvent:
         executeFetchCart();
         break;
+      case AddCartEvent:
+        executeAddCart(event as AddCartEvent);
+        break;
     }
   }
 
@@ -62,6 +65,28 @@ class HomeBloc extends BaseBloc {
   void executeFetchCart() {
     loadingSink.add(true);
     _cartRepository?.fetchCart().then((cartDto) {
+      var listProduct = List<Product>.empty(growable: true);
+      cartDto.productDTOs?.forEach((productDto) {
+        listProduct.add(Product(
+            productDto.id ?? "",
+            productDto.name ?? "",
+            productDto.address ?? "",
+            productDto.price ?? -1,
+            productDto.img ?? "",
+            productDto.quantity ?? -1,
+            productDto.gallery ?? List.empty()
+        ));
+      });
+      var resultCart = Cart(cartDto.id ?? "", listProduct, cartDto.price ?? 0);
+      _cartController.sink.add(resultCart);
+    }).catchError((e) {
+      messageSink.add(e.toString());
+    }).whenComplete(() => loadingSink.add(false));
+  }
+
+  void executeAddCart(AddCartEvent event) {
+    loadingSink.add(true);
+    _cartRepository?.addCart(event.idProduct).then((cartDto) {
       var listProduct = List<Product>.empty(growable: true);
       cartDto.productDTOs?.forEach((productDto) {
         listProduct.add(Product(

@@ -6,6 +6,7 @@ class AppConstant {
   static const String SIGN_UP_URL = "/user/sign-up";
   static const String LIST_PRODUCT_URL = "/product";
   static const String CART_URL = "/cart";
+  static const String ADD_CART_URL = "/cart/add";
 
   // Share preference key
   static const String TOKEN_KEY = "token";

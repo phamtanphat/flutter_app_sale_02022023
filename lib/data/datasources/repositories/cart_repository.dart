@@ -24,4 +24,18 @@ class CartRepository {
     }
     return completerCartDto.future;
   }
+
+  Future<CartDto> addCart(String idProduct) async {
+    Completer<CartDto> completerCartDto = Completer();
+    try {
+      Response response = await _apiRequest?.addCart(idProduct: idProduct);
+      AppResponse<CartDto> appResponse = AppResponse.fromJson(response.data, CartDto.fromJson);
+      completerCartDto.complete(appResponse.data);
+    } on DioError catch (e) {
+      completerCartDto.completeError(e.response?.data["message"]);
+    } catch (e) {
+      completerCartDto.completeError(e);
+    }
+    return completerCartDto.future;
+  }
 }

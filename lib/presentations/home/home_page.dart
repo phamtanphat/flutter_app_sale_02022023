@@ -44,9 +44,17 @@ class _HomePageState extends State<HomePage> {
                   stream: bloc.cartStream,
                   builder: (context, snapshot) {
                     if (snapshot.hasError || snapshot.data == null || snapshot.data?.products.isEmpty == true) {
-                      return Container();
+                      return InkWell(
+                        child: Container(
+                            margin: EdgeInsets.only(right: 10, top: 10),
+                            child: Icon(Icons.shopping_cart_outlined)
+                        ),
+                      );
                     }
-                    int count = snapshot.data?.products.length ?? 0;
+                    int count = 0;
+                    snapshot.data?.products.forEach((element) {
+                      count += element.quantity.toInt();
+                    });
                     return Container(
                       margin: EdgeInsets.only(right: 10, top: 10),
                       child: Badge(
@@ -180,7 +188,8 @@ class _HomePageContainerState extends State<HomePageContainer> {
                           children:[
                             ElevatedButton(
                               onPressed: () {
-
+                                  if (product.id.isEmpty) return;
+                                  _bloc.eventSink.add(AddCartEvent(idProduct: product.id));
                               },
                               style: ButtonStyle(
                                   backgroundColor:
